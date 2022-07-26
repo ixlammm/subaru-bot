@@ -24,11 +24,11 @@ let quoiReplies = ['Feur ','Feuse ','Fé','Fure','Chi','Drado','Resma','Driceps'
 let quoiTriggers = ['QUOI', 'QUOI?', 'QUOI ?'];
 
 client.on('messageCreate', msg => {
-    let args = msg.content.split(/ +/);
-    let isCommand = (args.shift() === "subaru");
+    let args = msg.content.toUpperCase().split(/ +/);
+let isCommand = (args.shift() === "SUBARU");
     if (isCommand) {
         let command = args.shift();
-        if(command === "play") {
+        if(command === "PLAY") {
             let track_name = args.join(" ");
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
                 deezer.legacyGetTrack(tracks.data[0].id).then(track => {
