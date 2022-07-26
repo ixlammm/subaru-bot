@@ -17,8 +17,15 @@ let quoiReplies = ['Feur ','Feuse ','Fé','Fure','Chi','Drado','Resma','Driceps'
 let quoiTriggers = ['QUOI', 'QUOI?', 'QUOI ?'];
 
 client.on('messageCreate', msg => {
-    if (quoiTriggers.some(quoiTrigger => { return msg.content.toUpperCase().endsWith(quoiTrigger) })) {
-        msg.reply('..'+quoiReplies[Math.floor(Math.random()*quoiReplies.length)].toLowerCase());
+    let args = msg.content.split(/ +/);
+    let isCommand = (args.shift() === "subaru");
+    if (isCommand) {
+        msg.channel.send("Yes ?");
+    }
+    else {
+        if (quoiTriggers.some(quoiTrigger => { return msg.content.toUpperCase().endsWith(quoiTrigger) })) {
+            msg.reply('..'+quoiReplies[Math.floor(Math.random()*quoiReplies.length)].toLowerCase());
+        }
     }
 });
 
