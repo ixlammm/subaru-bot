@@ -1,4 +1,5 @@
 require('dotenv').config(); //initialize dotenv
+const { ButtonStyle } = require('discord.js');
 const Discord = require('discord.js'); //import discord.js
 const deezerApi = require('./deezer-api')
 const deezer = new deezerApi();
@@ -32,6 +33,13 @@ let isCommand = (args.shift() === "SUBARU");
             let track_name = args.join(" ");
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
                 deezer.legacyGetTrack(tracks.data[0].id).then(track => {
+                    let row = new Discord.ActionRowBuilder()
+                    .addComponents(
+                        new Discord.ButtonBuilder()
+                        .setCustomId("skip")
+                        .setLabel("Skip")
+                        .setStyle(ButtonStyle.Danger)
+                    );
                     msg.channel.send({
                         content: `Now playing: ${track.artist.name} - ${track.title}`,
                         embeds: [
@@ -44,7 +52,10 @@ let isCommand = (args.shift() === "SUBARU");
                         files: [{
                           attachment: track.album.cover_big,
                           name: 'cover.jpg'
-                        }]
+                        }],
+                        components: [
+                            row
+                        ]
                       })
                 });
             });
