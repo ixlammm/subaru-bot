@@ -1,6 +1,7 @@
 require('dotenv').config(); //initialize dotenv
 const { ButtonStyle } = require('discord.js');
 const Discord = require('discord.js'); //import discord.js
+const Deezer = require('./deezer-api');
 const deezerApi = require('./deezer-api')
 const deezer = new deezerApi();
 
@@ -38,6 +39,12 @@ let isCommand = (args.shift() === "SUBARU");
                         embeds: [
                           {
                             title: `**${track.artist.name} - ${track.title}**`,
+                            fields: [
+                                { 
+                                    name: 'Duration',
+                                    value: `${new Date(track.duration * 1000).toISOString().substring(14, 19)}`
+                                }
+                            ],  
                             thumbnail: {
                                 url: 'attachment://cover.jpg'
                             }
