@@ -50,7 +50,7 @@ let isCommand = (args.shift() === "SUBARU");
                           }
                         ],
                         files: [{
-                          attachment: track.album.cover_big,
+                          attachment: track.album.cover_medium,
                           name: 'cover.jpg'
                         }],
                         components: [
