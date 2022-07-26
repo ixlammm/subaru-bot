@@ -20,7 +20,8 @@ client.on('messageCreate', msg => {
     let args = msg.content.split(/ +/);
     let isCommand = (args.shift() === "subaru");
     if (isCommand) {
-        msg.channel.send("Yes ?");
+        let command = args.shift();
+        msg.channel.send(`Running command ${command}, with args: ${args}`);
     }
     else {
         if (quoiTriggers.some(quoiTrigger => { return msg.content.toUpperCase().endsWith(quoiTrigger) })) {
