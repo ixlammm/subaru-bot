@@ -1,6 +1,7 @@
 require('dotenv').config(); //initialize dotenv
 const { ButtonStyle } = require('discord.js');
 const Discord = require('discord.js'); //import discord.js
+const DiscordVoice = require('@discordjs/voice');
 const Deezer = require('./deezer-api');
 const deezerApi = require('./deezer-api')
 const deezer = new deezerApi();
@@ -59,15 +60,11 @@ let isCommand = (args.shift() === "SUBARU");
             });
         }
         if (command === "TEST") {
-            var voiceChannel = msg.member.voice.channel;
-            if (voiceChannel) {
-                msg.reply("Testing...");
-                voiceChannel.join().then(connection => {
-                    connection.play("https://download.samplelib.com/mp3/sample-15s.mp3");
-                });
-            } else {
-                msg.reply("Join a voice channel first");
-            }
+            msg.reply("Testing...");
+            DiscordVoice.joinVoiceChannel({
+                channelId: msg.member.channel.id,
+                guildId: msg.member.guild.id,
+            });
         }
     }
     else {
