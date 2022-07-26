@@ -236,7 +236,7 @@ module.exports = class Deezer {
 
 	async getTrackMD5(id){
 		var body = await this.mobileApiCall(`song_getData`, {sng_id: id})
-		return body.results.PUID
+		return body;
 	}
 
   async getTracks(ids){
