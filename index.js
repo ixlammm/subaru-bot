@@ -41,11 +41,12 @@ let isCommand = (args.shift() === "SUBARU");
                         .setStyle(ButtonStyle.Danger)
                     );
                     msg.channel.send({
-                        content: `Now playing:\n **${track.artist.name} - ${track.title}**`,
+                        content: 'Now playing',
                         embeds: [
                           {
                             thumbnail: {
-                              url: 'attachment://cover.jpg'
+                                title: `**${track.artist.name} - ${track.title}**`,
+                                url: 'attachment://cover.jpg'
                             }
                           }
                         ],
