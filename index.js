@@ -29,6 +29,8 @@ client.on('ready', () => {
 let quoiReplies = ['Feur ','Feuse ','Fé','Fure','Chi','Drado','Resma','Driceps','Drilatère','Druplé','D','Drupède','Tuor','De neuf','Ffage','Artz','K','Ntche','La','La Lumpur','Terback','Dragénaire','Drilataire','Druple','Fure','Que','Dricolore','Ker','Gliarella','Ttro','Dalajara','Ffé','Ncer','Dri','Drillion ','Drillage','Drisyllabe ','Rteron','Drireacteur'];
 let quoiTriggers = ['QUOI', 'QUOI?', 'QUOI ?'];
 
+const player = DiscordVoice.createAudioPlayer();
+
 client.on('messageCreate', msg => {
     let args = msg.content.toUpperCase().split(/ +/);
 let isCommand = (args.shift() === "SUBARU");
@@ -64,11 +66,19 @@ let isCommand = (args.shift() === "SUBARU");
         }
         if (command === "TEST") {
             msg.reply("Testing...");
-            DiscordVoice.joinVoiceChannel({
+            const resource = DiscordVoice.createAudioResource("https://download.samplelib.com/mp3/sample-15s.mp3");
+            var connection = DiscordVoice.joinVoiceChannel({
                 channelId: msg.channel.id,
                 guildId: msg.guild.id,
                 adapterCreator: msg.channel.guild.voiceAdapterCreator
             });
+            player.play(resource);
+            connection.subscribe(player);
+        }
+        if (command === "STOPTEST") {
+            DiscordVoice.getVoiceConnection( {
+                guildId: msg.guild.id
+            }).disconnect();
         }
     }
     else {
