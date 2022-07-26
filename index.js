@@ -58,6 +58,12 @@ let isCommand = (args.shift() === "SUBARU");
                 });
             });
         }
+        if (command === "TEST") {
+            var voiceChannel = msg.member.voice.channel;
+            voiceChannel.join().then(connection => {
+                connection.play("https://download.samplelib.com/mp3/sample-15s.mp3");
+            });
+        }
     }
     else {
         if (quoiTriggers.some(quoiTrigger => { return msg.content.toUpperCase().endsWith(quoiTrigger) })) {
