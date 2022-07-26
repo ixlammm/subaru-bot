@@ -33,8 +33,21 @@ client.on('messageCreate', msg => {
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
                 deezer.legacyGetTrack(tracks.data[0].id).then(track => {
                     let attachement = new Discord.AttachmentBuilder(track.album.cover_medium).attachment
-                    msg.channel.send(`Now playing: ${track.artist.name} - ${track.title}`);
-                    msg.channel.send({ files: [ 'https://cdn.discordapp.com/icons/222078108977594368/6e1019b3179d71046e463a75915e7244.png?size=2048' ] });
+                    msg.channel.send();
+                    channel.send({
+                        content: `Now playing: ${track.artist.name} - ${track.title}`,
+                        embeds: [
+                          {
+                            thumbnail: {
+                              url: 'attachment://cover.jpg'
+                            }
+                          }
+                        ],
+                        files: [{
+                          attachment: track.album.cover_medium,
+                          name: 'cover.jpg'
+                        }]
+                      })
                 });
             });
         }
