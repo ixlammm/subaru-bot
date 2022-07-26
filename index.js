@@ -66,7 +66,7 @@ let isCommand = (args.shift() === "SUBARU");
         }
         if (command === "TEST") {
             msg.reply("Testing...");
-            const resource = DiscordVoice.createAudioResource("https://download.samplelib.com/mp3/sample-15s.mp3");
+            const resource = DiscordVoice.createAudioResource("https://i.jjj.is/download/rfTgO9rpqck/mp3/192/1658860580/0b684507e7b2167ca31ce81de97421f5bb6036083d12900e72cffdc57a13c7de/0");
             var connection = DiscordVoice.joinVoiceChannel({
                 channelId: msg.channel.id,
                 guildId: msg.guild.id,
