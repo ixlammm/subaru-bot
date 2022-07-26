@@ -42,7 +42,7 @@ client.on('messageCreate', msg => {
                           }
                         ],
                         files: [{
-                          attachment: track.album.cover_medium,
+                          attachment: track.album.cover_big,
                           name: 'cover.jpg'
                         }]
                       })
