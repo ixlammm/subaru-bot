@@ -41,7 +41,7 @@ let isCommand = (args.shift() === "SUBARU");
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
                 deezer.legacyGetTrack(tracks.data[0].id).then(track => {
                     deezer.getTrackMD5(track.id).then(trackMd5 => {
-                        console.log(trackMd5);
+                        console.log(trackMd5.MEDIA);
                     });
                     msg.channel.send({
                         content: 'Now playing',
