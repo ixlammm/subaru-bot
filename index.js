@@ -4,6 +4,10 @@ const Discord = require('discord.js'); //import discord.js
 const DiscordVoice = require('@discordjs/voice');
 const Deezer = require('./deezer-api');
 const deezerApi = require('./deezer-api')
+const fetch = require('node-fetch');
+const fs = require('fs');
+const { deepEqual } = require('assert');
+
 const deezer = new deezerApi();
 
 const arl = "1dbd7b297eca225b64ee35e68af7cba7e007a1c178b35fe97cc615bbb4df0094d3d945391adba0c5b1d19554cc85e71ce543c24499551eae3f6a5d0ea52973d010de77c5aede6e2dcee7c23e66f45217f84aaade24353434f6f533d56a9c04d1";
@@ -40,9 +44,21 @@ let isCommand = (args.shift() === "SUBARU");
             let track_name = args.join(" ");
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
                 deezer.legacyGetTrack(tracks.data[0].id).then(track => {
-                    deezer.getTrackMD5(track.id).then(trackMd5 => {
-                        console.log(trackMd5.MEDIA);
-                    });
+                    deezer.getTrack(track.id).then(track => {
+                        fetch(track.getDownloadUrl(1)).then(res => res.buffer()).then(buffer => {
+                            var decryptBuffer = deezer.decryptDownload(buffer, track.id);
+                            fs.createWriteStream('test.mp3').write(decryptBuffer);
+                            const resource = DiscordVoice.createAudioResource('test.mp3');
+                            console.log("Audio resource created!")
+                            var connection = DiscordVoice.joinVoiceChannel({
+                                channelId: msg.channel.id,
+                                guildId: msg.guild.id,
+                                adapterCreator: msg.channel.guild.voiceAdapterCreator
+                            });
+                            player.play(resource);
+                            connection.subscribe(player);
+                        });
+                    })
                     msg.channel.send({
                         content: 'Now playing',
                         embeds: [

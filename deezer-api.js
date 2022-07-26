@@ -1,10 +1,12 @@
 const request = require('request-promise')
 const tough = require('tough-cookie');
 const Track = require('./obj/Track.js')
-const Album = require('./obj/Album.js')
+const Album = require('./obj/Album.js');
+const { get } = require('request');
 const getBlowfishKey = require('./utils.js').getBlowfishKey
 const decryptChunk = require('./utils.js').decryptChunk
 const sleep = require('./utils.js').sleep
+const axios = require('axios')
 
 module.exports = class Deezer {
   constructor(){
@@ -220,6 +222,15 @@ module.exports = class Deezer {
     } catch(err){
       throw new Error(`Can't connect to Deezer: ${err.message}`)
     }
+  }
+
+  async getDecryptedStream(track) {
+    const resp = await axios({
+      method: 'get',
+      url: track.getDownloadUrl(1),
+      responceType: 'stream'
+    });
+    return this.decryptDownload(resp.data, track.id);
   }
 
   async getTrack(id){

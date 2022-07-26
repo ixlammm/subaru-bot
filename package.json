@@ -2,10 +2,14 @@
   "dependencies": {
     "@discordjs/rest": "^1.0.0",
     "@discordjs/voice": "^0.11.0",
+    "axios": "^0.27.2",
     "discord.js": "^14.0.3",
     "dotenv": "^16.0.1",
+    "node-fetch": "^2.6.6",
+    "nvm": "^0.0.4",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "util": "^0.12.4"
   },
   "name": "subarubot",
   "version": "1.0.0",

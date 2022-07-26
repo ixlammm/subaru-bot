@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const format = require('util').format
 
 function md5 (data, type = 'binary') {
   let md5sum = crypto.createHash('md5')
