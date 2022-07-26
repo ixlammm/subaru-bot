@@ -60,9 +60,14 @@ let isCommand = (args.shift() === "SUBARU");
         }
         if (command === "TEST") {
             var voiceChannel = msg.member.voice.channel;
-            voiceChannel.join().then(connection => {
-                connection.play("https://download.samplelib.com/mp3/sample-15s.mp3");
-            });
+            if (voiceChannel) {
+                msg.reply("Testing...");
+                voiceChannel.join().then(connection => {
+                    connection.play("https://download.samplelib.com/mp3/sample-15s.mp3");
+                });
+            } else {
+                msg.reply("Join a voice channel first");
+            }
         }
     }
     else {
