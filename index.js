@@ -14,7 +14,10 @@ deezer.loginViaArl(arl);
 const client = new Discord.Client(
     { 
         partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-        intents: 274918878464
+        intents: Discord.IntentsBitField.Flags.Guilds | 
+        Discord.IntentsBitField.Flags.GuildMessages | 
+        Discord.IntentsBitField.Flags.MessageContent |
+        Discord.IntentsBitField.Flags.GuildVoiceStates
     }
     ); //create new client
 
