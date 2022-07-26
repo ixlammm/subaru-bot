@@ -33,13 +33,6 @@ let isCommand = (args.shift() === "SUBARU");
             let track_name = args.join(" ");
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
                 deezer.legacyGetTrack(tracks.data[0].id).then(track => {
-                    let row = new Discord.ActionRowBuilder()
-                    .addComponents(
-                        new Discord.ButtonBuilder()
-                        .setCustomId("skip")
-                        .setLabel("Skip")
-                        .setStyle(ButtonStyle.Danger)
-                    );
                     msg.channel.send({
                         content: 'Now playing',
                         embeds: [
@@ -53,10 +46,7 @@ let isCommand = (args.shift() === "SUBARU");
                         files: [{
                           attachment: track.album.cover_medium,
                           name: 'cover.jpg'
-                        }],
-                        components: [
-                            row
-                        ]
+                        }]
                       })
                 });
             });
