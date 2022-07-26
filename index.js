@@ -76,9 +76,8 @@ let isCommand = (args.shift() === "SUBARU");
             connection.subscribe(player);
         }
         if (command === "STOPTEST") {
-            DiscordVoice.getVoiceConnection( {
-                guildId: msg.guild.id
-            }).disconnect();
+            msg.reply("Disconecting...");
+            DiscordVoice.getVoiceConnection(msg.guild.id).destroy();
         }
     }
     else {
