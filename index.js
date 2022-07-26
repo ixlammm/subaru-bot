@@ -39,7 +39,7 @@ client.on('messageCreate', msg => {
             let track_name = args.join(" ");
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
                 deezer.legacyGetTrack(tracks.data[0].id).then(track => {
-                    msg.channel.send(`Now playing: ${track.artist.name} - ${track.title}`);
+                    msg.channel.send(`Now playing: ${track.artist.name} - ${track.title}`, { files: [ track.album.cover_medium ] });
                 });
             });
         }
