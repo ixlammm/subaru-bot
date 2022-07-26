@@ -32,8 +32,6 @@ client.on('messageCreate', msg => {
             let track_name = args.join(" ");
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
                 deezer.legacyGetTrack(tracks.data[0].id).then(track => {
-                    let attachement = new Discord.AttachmentBuilder(track.album.cover_medium).attachment
-                    msg.channel.send();
                     msg.channel.send({
                         content: `Now playing: ${track.artist.name} - ${track.title}`,
                         embeds: [
