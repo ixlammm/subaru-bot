@@ -44,8 +44,8 @@ let isCommand = (args.shift() === "SUBARU");
                         content: 'Now playing',
                         embeds: [
                           {
+                            title: `**${track.artist.name} - ${track.title}**`,
                             thumbnail: {
-                                title: `**${track.artist.name} - ${track.title}**`,
                                 url: 'attachment://cover.jpg'
                             }
                           }
