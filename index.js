@@ -21,7 +21,7 @@ client.on('messageCreate', msg => {
     let isCommand = (args.shift() === "subaru");
     if (isCommand) {
         let command = args.shift();
-        msg.channel.send(`Running command ${command}, with args: ${args}`);
+        msg.channel.send(`Running command ${command}, with arguments: ${args}`);
     }
     else {
         if (quoiTriggers.some(quoiTrigger => { return msg.content.toUpperCase().endsWith(quoiTrigger) })) {
