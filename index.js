@@ -67,6 +67,7 @@ let isCommand = (args.shift() === "SUBARU");
             DiscordVoice.joinVoiceChannel({
                 channelId: msg.channel.id,
                 guildId: msg.guild.id,
+                adapterCreator: msg.channel.guild.voiceAdapterCreator
             });
         }
     }
