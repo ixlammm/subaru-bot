@@ -14,7 +14,7 @@ deezer.loginViaArl(arl);
 const client = new Discord.Client(
     { 
         partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-        intents: Discord.IntentsBitField.Flags.Guilds | Discord.IntentsBitField.Flags.GuildMessages | Discord.IntentsBitField.Flags.MessageContent
+        intents: 274918878464
     }
     ); //create new client
 
@@ -62,8 +62,8 @@ let isCommand = (args.shift() === "SUBARU");
         if (command === "TEST") {
             msg.reply("Testing...");
             DiscordVoice.joinVoiceChannel({
-                channelId: msg.member.channel.id,
-                guildId: msg.member.guild.id,
+                channelId: msg.channel.id,
+                guildId: msg.guild.id,
             });
         }
     }
