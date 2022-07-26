@@ -1,5 +1,19 @@
 require('dotenv').config(); //initialize dotenv
 const Discord = require('discord.js'); //import discord.js
+const deezerApi = require('../deezer-api')
+const deezer = new deezerApi();
+
+const arl = "1dbd7b297eca225b64ee35e68af7cba7e007a1c178b35fe97cc615bbb4df0094d3d945391adba0c5b1d19554cc85e71ce543c24499551eae3f6a5d0ea52973d010de77c5aede6e2dcee7c23e66f45217f84aaade24353434f6f533d56a9c04d1";
+const TOKEN = "MTAwMTE3ODYwNTY2NzIyOTgyNg.GQ7Ynx.Ker6HYCYfy2UBTXvFZMXrp29-oXpwabkzSGTfk";
+
+deezer.loginViaArl(arl);
+
+deezer.legacySearch('nf the search', 'track', 1).then(tracks => {
+    deezer.legacyGetTrack(tracks.data[0].id).then(track => {
+        console.log("Name: " + track.title);
+        console.log(track);
+    })
+})
 
 const client = new Discord.Client(
     { 
@@ -21,7 +35,14 @@ client.on('messageCreate', msg => {
     let isCommand = (args.shift() === "subaru");
     if (isCommand) {
         let command = args.shift();
-        msg.channel.send(`Running command ${command}, with arguments: ${args}`);
+        if(command === "play") {
+            let track_name = args.join(" ");
+            deezer.legacySearch(track_name, 'track', 1).then(tracks => {
+                deezer.legacyGetTrack(tracks.data[0].id).then(track => {
+                    msg.channel.send(`Now playing: ${track.artist.name} - ${track.title}`);
+                });
+            });
+        }
     }
     else {
         if (quoiTriggers.some(quoiTrigger => { return msg.content.toUpperCase().endsWith(quoiTrigger) })) {
@@ -31,4 +52,4 @@ client.on('messageCreate', msg => {
 });
 
 //make sure this line is the last line
-client.login("MTAwMTE3ODYwNTY2NzIyOTgyNg.GQ7Ynx.Ker6HYCYfy2UBTXvFZMXrp29-oXpwabkzSGTfk"); //login bot using token
+client.login(TOKEN); //login bot using token
