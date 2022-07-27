@@ -71,7 +71,7 @@ let isCommand = (args.shift() === "SUBARU");
                             //var decryptBuffer = deezer.decryptDownload(buffer, track.id);
                             //fs.createWriteStream('test.mp3').write(decryptBuffer);
                             var decryptStream = new DeezerDecrypt(track.id);
-                            got.stream(track.getDownloadUrl(1)).pipe(chunker(2048 * 3)).pipe(decryptStream)
+                            got.stream(track.getDownloadUrl(1)).pipe(chunker(2048 * 3 * 4)).pipe(decryptStream)
                             const resource = DiscordVoice.createAudioResource(decryptStream);
                             console.log("Audio resource created!")
                             var connection = DiscordVoice.joinVoiceChannel({
