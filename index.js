@@ -100,8 +100,7 @@ function playTrack(trackId) {
         } else {
             msg.channel.send("Please set a voice channel first.");
         }
-    })
-});
+    });
 }
 
 client.on('messageCreate', msg => {
