@@ -109,18 +109,17 @@ let isCommand = (args.shift() === "SUBARU");
     if (isCommand) {
         let command = args.shift();
         if (command === "SETMC") {
-            console.log(msg.channel.guild.voiceAdapterCreator);
             let voicedata = {
                 available: true,
                 channelId: msg.channel.id,
                 guildId: msg.guild.id,
-                adapterCreator: msg.channel.guild.voiceAdapterCreator
             };
             fs.writeFileSync('database', JSON.stringify(voicedata), 'utf-8');
             if(c = DiscordVoice.getVoiceConnection(voicedata.guildId)) c.destroy();
             const connection = DiscordVoice.joinVoiceChannel({
                 channelId: voicedata.channelId,
-                guildId: voicedata.guildId
+                guildId: voicedata.guildId,
+                adapterCreator: msg.guild.voiceAdapterCreator
             });
             if (!connection) {
                 msg.channel.send("Could not set current channel as Music Channel");
