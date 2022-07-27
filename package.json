@@ -5,10 +5,12 @@
     "axios": "^0.27.2",
     "discord.js": "^14.0.3",
     "dotenv": "^16.0.1",
+    "got": "^11.8.2",
     "node-fetch": "^2.6.6",
     "nvm": "^0.0.4",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
+    "stream-chunker": "^1.2.8",
     "util": "^0.12.4"
   },
   "name": "subarubot",
