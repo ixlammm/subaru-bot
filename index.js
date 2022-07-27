@@ -140,9 +140,9 @@ let isCommand = (args.shift() === "SUBARU");
         if(command === "PLAY") {
             let track_name = args.join(" ");
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
-                if (tracks.data) {
+                try {
                     playTrack(msg, tracks.data[0].id);
-                } else {
+                } catch(err) {
                     msg.channel.send("Could not find the music you're looking for :(");
                 }
             });
