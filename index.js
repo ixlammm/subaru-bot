@@ -67,7 +67,7 @@ client.on('ready', () => {
     }
 })
 
-function playTrack(trackId) {
+function playTrack(msg, trackId) {
     deezer.getTrack(trackId).then(track => {
         msg.channel.send({
             content: '*Playing Next:*',
@@ -141,7 +141,7 @@ let isCommand = (args.shift() === "SUBARU");
             let track_name = args.join(" ");
             deezer.legacySearch(track_name, 'track', 1).then(tracks => {
                 if (tracks.data) {
-                    playTrack(tracks.data[0].id);
+                    playTrack(msg, tracks.data[0].id);
                 } else {
                     msg.channel.send("Could not find the music you're looking for :(");
                 }
