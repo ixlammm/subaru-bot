@@ -48,7 +48,6 @@ class DeezerDecrypt extends Transform {
     }
 
     _transform(chunk, encoding, callback) {
-        console.log(chunk.length);
         this.push(deezer.decryptDownload(chunk, this.trackId));
         callback();
     }
