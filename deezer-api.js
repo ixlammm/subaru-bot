@@ -238,9 +238,9 @@ module.exports = class Deezer {
     if (id<0){
       body = await this.apiCall(`song.getData`, {sng_id: id})
     }else{
-      body = await this.apiCall(`deezer.pageTrack`, {sng_id: id})
-			if (body.results.LYRICS) body.results.DATA.LYRICS = body.results.LYRICS
-      body.results = body.results.DATA
+      //body = await this.apiCall(`deezer.pageTrack`, {sng_id: id})
+      body = await this.mobileApiCall(`song_getData`, {sng_id: id})
+      body.results = body.results
     }
     return new Track(body.results)
   }

@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 const crypto = require('crypto')
 const fs = require('fs');
 const { deepEqual } = require('assert');
-const got = require('got');
+const https = require('https');
 const { Duplex, Transform, PassThrough } = require('stream');
 const utils = require('./utils');
 const { setNonEnumerableProperties } = require('got');
@@ -31,11 +31,6 @@ const client = new Discord.Client(
     }
     ); //create new client
 
-
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-});
-
 let quoiReplies = ['Feur ','Feuse ','Fé','Fure','Chi','Drado','Resma','Driceps','Drilatère','Druplé','D','Drupède','Tuor','De neuf','Ffage','Artz','K','Ntche','La','La Lumpur','Terback','Dragénaire','Drilataire','Druple','Fure','Que','Dricolore','Ker','Gliarella','Ttro','Dalajara','Ffé','Ncer','Dri','Drillion ','Drillage','Drisyllabe ','Rteron','Drireacteur'];
 let quoiTriggers = ['QUOI', 'QUOI?', 'QUOI ?'];
 
@@ -57,70 +52,105 @@ class DeezerDecrypt extends Transform {
     }
 }
 
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+
+    const data = fs.readFileSync('database', { encoding: 'utf-8', flag: 'r' });
+    let voicedata = JSON.parse(data);
+    if (voicedata.available) {
+        const guild = client.guilds.cache.get(voicedata.guildId);
+        DiscordVoice.joinVoiceChannel({
+            channelId: voicedata.channelId,
+            guildId: guild.id,
+            adapterCreator: guild.voiceAdapterCreator
+        });
+    }
+})
+
+function playTrack(trackId) {
+    deezer.getTrack(trackId).then(track => {
+        msg.channel.send({
+            content: '*Playing Next:*',
+            embeds: [
+            {
+                title: `**${track.body.ART_NAME} - ${track.body.SNG_TITLE}**`,
+                fields: [
+                    { 
+                        name: 'Duration',
+                        value: `${new Date(track.body.DURATION * 1000).toISOString().substring(14, 19)}`
+                    }
+                ],  
+                thumbnail: {
+                    url: 'attachment://cover.jpg'
+                }
+            }
+            ],
+            files: [{
+            attachment: deezer.albumPicturesHost + track.body.ALB_PICTURE + '/264x264-000000-80-0-0.jpg',
+            name: 'cover.jpg'
+            }]
+        })
+        var decryptStream = new DeezerDecrypt(track.body.SNG_ID);
+        https.get(track.getDownloadUrl(1), response => {response.pipe(chunker(2048 * 3 * 4)).pipe(decryptStream)})
+        const connection = DiscordVoice.getVoiceConnection(msg.guild.id);
+        if (connection) {
+            const resource = DiscordVoice.createAudioResource(decryptStream);
+            player.play(resource);
+            connection.subscribe(player);
+        } else {
+            msg.channel.send("Please set a voice channel first.");
+        }
+    })
+});
+}
+
 client.on('messageCreate', msg => {
     let args = msg.content.toUpperCase().split(/ +/);
 let isCommand = (args.shift() === "SUBARU");
     if (isCommand) {
         let command = args.shift();
-        if(command === "PLAY") {
-            let track_name = args.join(" ");
-            deezer.legacySearch(track_name, 'track', 1).then(tracks => {
-                deezer.legacyGetTrack(tracks.data[0].id).then(track => {
-                    deezer.getTrack(track.id).then(track => {
-                        //fetch(track.getDownloadUrl(1)).then(res => res.buffer()).then(buffer => {
-                            //var decryptBuffer = deezer.decryptDownload(buffer, track.id);
-                            //fs.createWriteStream('test.mp3').write(decryptBuffer);
-                            var decryptStream = new DeezerDecrypt(track.id);
-                            got.stream(track.getDownloadUrl(1)).pipe(chunker(2048 * 3 * 4)).pipe(decryptStream)
-                            const resource = DiscordVoice.createAudioResource(decryptStream);
-                            console.log("Audio resource created!")
-                            var connection = DiscordVoice.joinVoiceChannel({
-                                channelId: msg.channel.id,
-                                guildId: msg.guild.id,
-                                adapterCreator: msg.channel.guild.voiceAdapterCreator
-                            });
-                            player.play(resource);
-                            connection.subscribe(player);
-                        //});
-                    })
-                    msg.channel.send({
-                        content: 'Now playing',
-                        embeds: [
-                          {
-                            title: `**${track.artist.name} - ${track.title}**`,
-                            fields: [
-                                { 
-                                    name: 'Duration',
-                                    value: `${new Date(track.duration * 1000).toISOString().substring(14, 19)}`
-                                }
-                            ],  
-                            thumbnail: {
-                                url: 'attachment://cover.jpg'
-                            }
-                          }
-                        ],
-                        files: [{
-                          attachment: track.album.cover_medium,
-                          name: 'cover.jpg'
-                        }]
-                      })
-                });
-            });
-        }
-        if (command === "TEST") {
-            msg.reply("Testing...");
-            const resource = DiscordVoice.createAudioResource("https://audio.jukehost.co.uk/api/external/download/zoAFh0Zns64f6ElCLsNbwx6TytpKMplf");
-            var connection = DiscordVoice.joinVoiceChannel({
+        if (command === "SETMC") {
+            console.log(msg.channel.guild.voiceAdapterCreator);
+            let voicedata = {
+                available: true,
                 channelId: msg.channel.id,
                 guildId: msg.guild.id,
                 adapterCreator: msg.channel.guild.voiceAdapterCreator
+            };
+            fs.writeFileSync('database', JSON.stringify(voicedata), 'utf-8');
+            if(c = DiscordVoice.getVoiceConnection(voicedata.guildId)) c.destroy();
+            const connection = DiscordVoice.joinVoiceChannel({
+                channelId: voicedata.channelId,
+                guildId: voicedata.guildId
             });
-            player.play(resource);
-            connection.subscribe(player);
+            if (!connection) {
+                msg.channel.send("Could not set current channel as Music Channel");
+            } else {
+                msg.channel.send("Current channel set as **Music Channel**");
+            }
         }
-        if (command === "STOPTEST") {
-            msg.reply("Disconecting...");
-            DiscordVoice.getVoiceConnection(msg.guild.id).destroy();
+        if(command === "LEAVE") {
+            const connection = DiscordVoice.getVoiceConnection(msg.guild.id);
+            if (connection) {
+                msg.channel.send("Bye. ");
+                connection.destroy();
+            } else {
+                msg.channel.send("I'm not even in a voice channel :(");
+            }
+        }
+        if(command === "PLAY") {
+            let track_name = args.join(" ");
+            deezer.legacySearch(track_name, 'track', 1).then(tracks => {
+                if (tracks.data) {
+                    playTrack(tracks.data[0].id);
+                } else {
+                    msg.channel.send("Could not find the music you're looking for :(");
+                }
+            });
+        }
+        if (command === "STOP") {
+            msg.channel.send("The player has stoped.");
+            player.stop();
         }
     }
     else {
