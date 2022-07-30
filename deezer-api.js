@@ -1,6 +1,6 @@
 const request = require('request-promise')
 const tough = require('tough-cookie');
-const Track = require('./obj/Track.js')
+const { Track } = require('./obj/Track.js')
 const Album = require('./obj/Album.js');
 const { get } = require('request');
 const getBlowfishKey = require('./utils.js').getBlowfishKey
@@ -122,8 +122,8 @@ module.exports = class Deezer {
 					api_key: "4VCYIJUCDLOUELGD1V8WBVYBNVDYOXEWSLLZDONGBBDFVXTZJRXPR29JRLQFO6ZE",
 					sid: (this.sid ? this.sid : await this.getSID()),
 					method: method,
-					output: "3",
-					input: "3"
+					output: "1",
+					input: "1"
 				},
 				body: args,
 				jar: this.jar,
@@ -218,6 +218,7 @@ module.exports = class Deezer {
         picture: userData.results.USER.USER_PICTURE ? `https://e-cdns-images.dzcdn.net/images/user/${userData.results.USER.USER_PICTURE}/250x250-000000-80-0-0.jpg` : "https://e-cdns-images.dzcdn.net/images/user/250x250-000000-80-0-0.jpg",
 				arl: arl
 			}
+      await this.getSID();
       return true
     } catch(err){
       throw new Error(`Can't connect to Deezer: ${err.message}`)
@@ -240,7 +241,6 @@ module.exports = class Deezer {
     }else{
       //body = await this.apiCall(`deezer.pageTrack`, {sng_id: id})
       body = await this.mobileApiCall(`song_getData`, {sng_id: id})
-      body.results = body.results
     }
     return new Track(body.results)
   }
