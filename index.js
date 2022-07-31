@@ -187,7 +187,7 @@ client.on('messageCreate', async msg => {
                     if (tracks.data[0]) {
                         queue.push({ 
                             id: tracks.data[0].id,
-                            title: tracks.data[0].title   
+                            title: tracks.data[0].artist.name + '-' + tracks.data[0].title   
                         });
                         msg.channel.send(`**${tracks.data[0].title}** has been added to your queue.`);
                         if (player.state.status !== AudioPlayerStatus.Playing) {
@@ -205,7 +205,7 @@ client.on('messageCreate', async msg => {
                 body.data.map(song => {
                     queue.push({ 
                         id: song.id,
-                        title: song.title   
+                        title: song.artist.name + '-' + song.title   
                     });
                 });
                 msg.channel.send('Playing flow ...');
