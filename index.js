@@ -179,7 +179,7 @@ client.on('messageCreate', async msg => {
                 if (queue.length < 1) {
                     msg.channel.send("The music queue is empty.");
                 } else if (player.state.status !== AudioPlayerStatus.Playing) {
-                    playQueue(msg.guild.id, channel);                                      
+                    playQueue(msg.guild.id, msg.channel);                                      
                 }
             } else {
                 let track_name = args.join(" ");
@@ -210,7 +210,7 @@ client.on('messageCreate', async msg => {
                 });
                 msg.channel.send('Playing flow ...');
                 printQueue(msg);
-                playQueue(msg.guild.id, channel);
+                playQueue(msg.guild.id, msg.channel);
             });
         }
         if (command === "CLEAR") {
