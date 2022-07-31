@@ -202,7 +202,7 @@ client.on('messageCreate', async msg => {
         if (command === "FLOW") {
             deezer.legacyGetUserFlow().then(body => {
                 queue = []
-                body.map(song => {
+                body.data.map(song => {
                     queue.push({ 
                         id: song.id,
                         title: song.title   
