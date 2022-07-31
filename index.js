@@ -210,7 +210,7 @@ client.on('messageCreate', async msg => {
                 });
                 msg.channel.send('Playing flow ...');
                 printQueue(msg);
-                playQueue(queue);
+                playQueue(msg.guild.id, channel);
             });
         }
         if (command === "CLEAR") {
