@@ -123,6 +123,11 @@ function playQueue(guildId, channel) {
     if (qe = queue.shift()) {
         playTrack(qe.id, guildId, channel);
     }
+    player.on(AudioPlayerStatus.Idle, () => {
+        if (queue.length > 0) {
+            playQueue(guildId, channel);
+        }
+    })
 }
 
 client.on('messageCreate', async msg => {
@@ -170,7 +175,7 @@ client.on('messageCreate', async msg => {
                 if (queue.length < 1) {
                     msg.channel.send("The music queue is empty.");
                 } else if (player.state.status !== AudioPlayerStatus.Playing) {
-                    playQueue(guildId, channel);                                      
+                    playQueue(msg.guild.id, channel);                                      
                 }
             } else {
                 let track_name = args.join(" ");
@@ -189,9 +194,6 @@ client.on('messageCreate', async msg => {
                     }
                 });
             }
-            player.on(AudioPlayerStatus.Idle, () => {
-                playQueue(msg.guild.id, msg.channel)
-            })
         }
         if (command === "CLEAR") {
             if(player.state.status === AudioPlayerStatus.Playing) {
@@ -211,6 +213,7 @@ client.on('messageCreate', async msg => {
         if (command === "STOP") {
             msg.channel.send("The player has stoped.");
             player.stop();
+            player.removeAllListeners();
         }
     }
     else {
