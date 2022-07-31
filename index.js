@@ -130,6 +130,10 @@ function playQueue(guildId, channel) {
     })
 }
 
+function printQueue(msg) {
+    msg.channel.send(queue.map(qe => { return `** - ${qe.title}**` }).join('\n'));
+}
+
 client.on('messageCreate', async msg => {
     let args = msg.content.toUpperCase().split(/ +/);
     let isCommand = (args.shift() === "SUBARU");
@@ -165,7 +169,7 @@ client.on('messageCreate', async msg => {
         }
         if(command === "QUEUE") {
             if (queue.length > 0) {
-                msg.channel.send(queue.map(qe => { return `** - ${qe.title}**` }).join('\n'));
+                printQueue(msg);
             } else {
                 msg.channel.send("The music queue is empty :(");
             }
@@ -194,6 +198,20 @@ client.on('messageCreate', async msg => {
                     }
                 });
             }
+        }
+        if (command === "FLOW") {
+            deezer.legacyGetUserFlow().then(body => {
+                queue = []
+                body.map(song => {
+                    queue.push({ 
+                        id: song.id,
+                        title: song.title   
+                    });
+                });
+                msg.channel.send('Playing flow ...');
+                printQueue(msg);
+                playQueue(queue);
+            });
         }
         if (command === "CLEAR") {
             if(player.state.status === AudioPlayerStatus.Playing) {

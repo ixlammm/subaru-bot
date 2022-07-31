@@ -366,6 +366,13 @@ module.exports = class Deezer {
     return body
   }
 
+  async legacyGetUserFlow(){
+    var body = await this.legacyApiCall(`user/${this.user.id}/flow`, {limit: -1})
+		if (body.data[0] && body.data[0].title == "Loved tracks")
+			body.data.shift()
+    return body
+  }
+
   async legacyGetTrack(id){
     var body = await this.legacyApiCall(`track/${id}`)
     return body
